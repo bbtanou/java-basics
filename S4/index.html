@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <title>ODC Node JS</title>
+</head>
+<body class="container">
+   <form id="form">
+        <div class="my-2">
+            <label class="form-label">Nom d'utilisateur</label>
+            <input type="text" name="username" id="username" class="form-control">
+        </div>
+        <div class="my-2">
+            <label for="form-label">Mot de passe</label>
+            <input type="password" name="password" id="password" class="form-control">
+        </div>
+
+        <button class="btn btn-primary" id="login">Se connecter</button>
+   </form>
+
+   <h1 id="response"></h1>
+
+   <script>
+        document.getElementById('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = new FormData(e.target);
+
+            const data = Object.fromEntries(form);
+
+            await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+
+            })
+        })
+   </script>
+</body>
+</html>
