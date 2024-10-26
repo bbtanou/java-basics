@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ODC Final Day</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+</head>
+<body class="container-md">
+    <form id="form">
+        <div class="my-1">
+            <label class="form-label">Nom complet</label>
+            <input class="form-control" name="nom" />
+        </div>
+        <div class="my-1">
+            <label class="form-label">Telephone</label>
+            <input class="form-control" name="telephone"/>
+        </div>
+
+        <button class="btn btn-primary">Enregistrer</button>
+    </form>
+
+    <table>
+        <thead>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Telephone</th>
+        </thead>
+        <tbody id="list">
+
+        </tbody>
+    </table>
+
+    <script>
+        getPersonList()
+        document.getElementById('form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = new FormData(e.target);
+
+            const data = Object.fromEntries(form);
+
+            fetch('/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }).then(() => {
+                getPersonList();
+                window.location.reload();
+            })
+                .catch((err) => console.log('error: ', err))
+
+        })
+
+
+        function getPersonList(){
+            fetch('/list').then( async (response) => {
+                if (response.ok){
+                    people = await response.json();
+                    const tbody = document.getElementById('list');
+                    console.log(people.data);
+                    for (person of people.data){
+                        const tr = document.createElement('tr');
+                        const id = document.createElement('td');
+                        id.innerText = person.id;
+                        const nom = document.createElement('td');
+                        nom.innerText = person.nom;
+                        const telephone = document.createElement('td');
+                        telephone.innerText = person.telephone;
+
+                        tr.appendChild(id);
+                        tr.appendChild(nom);
+                        tr.appendChild(telephone);
+
+                        tbody.appendChild(tr);
+                    }
+                }
+
+            }).catch((err) => {
+                console.log('Impossible de recuperer la liste des personnes: ', err);
+            })
+        }
+    </script>
+</body>
+</html>
