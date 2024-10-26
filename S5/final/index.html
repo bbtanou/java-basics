@@ -7,23 +7,27 @@
 </head>
 <body class="container-md">
     <form id="form">
+        <input hidden="hidden" name="id" id="id">
         <div class="my-1">
             <label class="form-label">Nom complet</label>
-            <input class="form-control" name="nom" />
+            <input class="form-control" name="nom" id="nom"/>
         </div>
         <div class="my-1">
             <label class="form-label">Telephone</label>
-            <input class="form-control" name="telephone"/>
+            <input class="form-control" name="telephone" id="telephone"/>
         </div>
 
         <button class="btn btn-primary">Enregistrer</button>
     </form>
 
-    <table>
+    <table class="table">
         <thead>
-            <th>ID</th>
-            <th>Nom</th>
-            <th>Telephone</th>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Telephone</th>
+                <th>Action</th>
+            </tr>
         </thead>
         <tbody id="list">
 
@@ -38,27 +42,26 @@
             const form = new FormData(e.target);
 
             const data = Object.fromEntries(form);
-
-            fetch('/save', {
+            const request = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
-            }).then(() => {
+            }
+            fetch('/save', request).then(() => {
                 getPersonList();
-                window.location.reload();
-            })
-                .catch((err) => console.log('error: ', err))
-
+                e.target.reset();
+            });
         })
 
 
         function getPersonList(){
             fetch('/list').then( async (response) => {
                 if (response.ok){
-                    people = await response.json();
+                    const people = await response.json();
                     const tbody = document.getElementById('list');
+                    tbody.innerHTML = '';
                     console.log(people.data);
                     for (person of people.data){
                         const tr = document.createElement('tr');
@@ -69,11 +72,50 @@
                         const telephone = document.createElement('td');
                         telephone.innerText = person.telephone;
 
+                        const action = document.createElement('td');
+                        const sup = document.createElement('button');
+                        sup.classList.add('btn', 'btn-danger', 'mx-1');
+                        sup.innerText = 'Supprimer'
+                        sup.id = person.id;
+
+                        const edit = document.createElement('button');
+                        edit.classList.add('btn', 'btn-info', 'mx-1');
+                        edit.innerText = 'Modifier';
+                        edit.id = person.id;
+
+
+                        action.appendChild(sup);
+                        action.appendChild(edit);
+
                         tr.appendChild(id);
                         tr.appendChild(nom);
                         tr.appendChild(telephone);
+                        tr.appendChild(action);
 
                         tbody.appendChild(tr);
+
+                        sup.addEventListener('click', (e) => {
+                            fetch(`/delete/${sup.id}`, {method: 'DELETE'})
+                                .then((res) => getPersonList())
+                                .catch((err) => console.log('impossible de supprimer ', err))
+                        });
+
+                        edit.addEventListener('click', (e) => {
+                            fetch(`person/${edit.id}`).then( async (res) => {
+                                if (res.ok){
+                                    const results = await res.json();
+                                    const data = results.data[0];
+                                    const ID = document.getElementById('id');
+                                    ID.value = data.id;
+                                    const name = document.getElementById('nom');
+                                    name.value = data.nom;
+                                    const phone = document.getElementById('telephone');
+                                    phone.value = data.telephone;
+
+                                    console.log(data);
+                                }
+                            }).catch((e) => console.log('impossible de recuperer ', edit.id, e));
+                        })
                     }
                 }
 
