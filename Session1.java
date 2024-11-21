@@ -1,34 +1,68 @@
+import java.util.Scanner;
+
 public class Session1 {
-   public static void main(String[] args){
-       //somme des int
-//       int sumEntier = sumInt(3, 5);
-//       System.out.println("La somme des entiers: " + sumEntier);
-//
-       //somme des float
-       float sumFloat = sumFloat(5, 7.6f);
-       System.out.println("La somme des floats est: " + sumFloat);
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choisissez l'operation que vous voulez");
+        System.out.println("1 - Somme");
+        System.out.println("2 - Soustraction");
+        System.out.println("3 - Multiplication");
+        System.out.println("4 - Division");
 
-       //somme des double;
-       double sumDouble = sumDouble(5, 90.8);
-       System.out.println("La somme des doubles est: " + sumDouble);
+        int choix = scanner.nextInt();
+        
+        switch (choix) {
+            case 1:
+                System.out.println("Donner le premier nombre");
+                int a = scanner.nextInt();
+                System.out.println("Donner le deuxieme nombre");
+                int b = scanner.nextInt();
+                int sum = calculSomme(a, b);
+                System.out.println("La somme est: " + sum);
+                break;
+            case 2:
+                System.out.println("Donner le premier nombre");
+                int x = scanner.nextInt();
+                System.out.println("Donner le deuxieme nombre");
+                int y = scanner.nextInt();
+                int subs = calculSoustraction(x, y);
+                System.out.println("La resultat est: " + subs);
+            case 3:
+                System.out.println("Donner le premier nombre");
+                int c = scanner.nextInt();
+                System.out.println("Donner le deuxieme nombre");
+                int d = scanner.nextInt();
+                int mult = calculProduit(c, d);
+                System.out.println("Le resultat est: " + mult);
+            case 4:
+                System.out.println("Donner le premier nombre");
+                int t = scanner.nextInt();
+                System.out.println("Donner le deuxieme nombre");
+                int f = scanner.nextInt();
+                int div = calculDivision(t, f);
+                System.out.println("Le resultat est: " + div);
+            default:
+                System.out.println("Vous devez donner un nombre entre 1, 2, 3, 4");
+                break;
+        }
 
-       //somme des long
-       long sumLong = sumLong(5, 34);
-       System.out.println("La somme des long est: " + sumLong);
-   }
+    }
 
-   static int sumInt(int x, int y){
-       return x + y;
-   }
 
-   static float sumFloat(float x, float y){
-       return x + y;
-   }
+    static int calculSomme(int a, int b){
+        return a + b;
+    }
 
-   static double sumDouble(double x, double y){
-       return x + y;
-   }
-   static long sumLong(long x, long y){
-       return x + y;
-   }
+    static int calculSoustraction(int a, int b){
+        return a - b;
+    }
+
+    static int calculProduit(int a, int b){
+        return a * b;
+    }
+
+    static int calculDivision(int a, int b){
+        return a / b;
+    }
+
 }
