@@ -29,7 +29,7 @@ public class TodoView {
         
         TodoDto todoDto = create();
         
-        controller.update(choix - 1, todoDto);
+        controller.update(choix, todoDto);
     }
 
     public void show(){
@@ -40,9 +40,8 @@ public class TodoView {
 
         System.out.println("*** Liste des taches");
 
-        int i = 1;
         for(var todo: controller.findAll()){
-            System.out.println(i + " - " + todo.getName() + " -> " + todo.getStatus());
+            System.out.println(todo.getId() + " - " + todo.getName() + " -> " + todo.getStatus());
             System.out.println("__________________________________________");
         }
     }
