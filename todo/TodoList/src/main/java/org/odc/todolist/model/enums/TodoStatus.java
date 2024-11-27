@@ -1,7 +1,7 @@
 package org.odc.todolist.model.enums;
 
 public enum TodoStatus {
-    PENDING,
-    COMPLETED,
-    CANCELED,
+    EN_ATTENTE,
+    COMPLETE,
+    ANNULE,
 }
